@@ -20,9 +20,7 @@ model.>
 We plan one using python in Jupyter Notebook. Although programs like NetLogo are specialised in Agent-Based models, these are more focused on the 2d simulations while we are more focused on the network of the people. In python we have the freedom to create a network with agents in the way we want for our model.
 
 ## Plan for division of work (max 100 words):
-<Prospecting plan on who will do what (it’s not binding, might change during the course, but try to 
-come up with something realistic). This should include all activities.>
-
+We will all be part of the decision processes with regards to the scientific question, the method of investigation, the tools we use and the planned timeline. Subsequently, we will all work on the coding of our model, the literature study and writing the report. However, Rae will be ultimately responsable for the literature study, Luuk and Jeffrey will be ultimately responsable for the building of the model, and all three will be responsible for the (design) choices and analysis written in the report.
 
 ## Timeline (max 100 words):
 <A short timeline plan from the start of the project till the end of the course. Keep it concise and 
