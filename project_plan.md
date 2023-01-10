@@ -17,7 +17,7 @@ affects the number of signers.
 model.>
 
 ## Provisioned tools (max 100 words): 
-<A list of e.g. programming languages, version control, visualization tools, etc.>
+We plan one using python in Jupyter Notebook. Although programs like NetLogo are specialised in Agent-Based models, these are more focused on the 2d simulations while we are more focused on the network of the people. In python we have the freedom to create a network with agents in the way we want for our model.
 
 ## Plan for division of work (max 100 words):
 <Prospecting plan on who will do what (it’s not binding, might change during the course, but try to 
