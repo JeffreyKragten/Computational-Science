@@ -1,7 +1,7 @@
 # Project plan
 ## Project title: The silent minority
-Team members: Ray Pelupessy; Luuk van der Waals; Jeffrey Kragten
-Team number and team name (optional):
+Team members: Ray Pelupessy; Luuk van der Waals; Jeffrey Kragten<br>
+Team number: 4
 
 ## Scientific question:
 Sign language is primarily used by deaf people, but the use of sign language is not completely dependent on
@@ -35,6 +35,7 @@ the tools we use and the planned timeline. Subsequently, we will all work on the
 the literature study and writing the report. However, Ray will be ultimately responsible for the literature study,
 Luuk and Jeffrey will be ultimately responsible for the building of the model,
 and all three will be responsible for the (design) choices and analysis written in the report.
+The poster will primarily be made by Ray, the presentation will be created and presented by all three students.
 
 ## Timeline:
 15 jan: finish collecting necessary data/sources<br/>
