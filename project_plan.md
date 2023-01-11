@@ -1,6 +1,6 @@
 # Project plan
 ## Project title (max. 200 characters): <fill this last, after the other details are decided>
-Team members: <name1; name2; name3>
+Team members: <Ray Pelupessi; Luuk van der Waals; Jeffrey Kragten>
 Team number and team name (optional):
 
 ## Scientific question (max. 350 words)
@@ -17,10 +17,17 @@ affects the number of signers.
 model.>
 
 ## Provisioned tools (max 100 words): 
-We plan one using python in Jupyter Notebook. Although programs like NetLogo are specialised in Agent-Based models, these are more focused on the 2d simulations while we are more focused on the network of the people. In python we have the freedom to create a network with agents in the way we want for our model.
+We plan one using python in Jupyter Notebook. Although programs like NetLogo are specialised in Agent-Based models, 
+these are more focused on the 2d simulations while we are more focused on the network of the people. 
+In python we have the freedom to create a network with agents in the way we want for our model.
+<<Visualization tools??>
 
 ## Plan for division of work (max 100 words):
-We will all be part of the decision processes with regards to the scientific question, the method of investigation, the tools we use and the planned timeline. Subsequently, we will all work on the coding of our model, the literature study and writing the report. However, Rae will be ultimately responsible for the literature study, Luuk and Jeffrey will be ultimately responsible for the building of the model, and all three will be responsible for the (design) choices and analysis written in the report.
+We will all be part of the decision processes with regards to the scientific question, the method of investigation,
+the tools we use and the planned timeline. Subsequently, we will all work on the coding of our model,
+the literature study and writing the report. However, Rae will be ultimately responsible for the literature study,
+Luuk and Jeffrey will be ultimately responsible for the building of the model,
+and all three will be responsible for the (design) choices and analysis written in the report.
 
 ## Timeline (max 100 words):
 <A short timeline plan from the start of the project till the end of the course. Keep it concise and 
