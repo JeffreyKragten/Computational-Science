@@ -35,8 +35,8 @@ Luuk and Jeffrey will be ultimately responsible for the building of the model,
 and all three will be responsible for the (design) choices and analysis written in the report.
 
 ## Timeline (max 100 words):
-15 jan: finish collecting necessary data/sources
-25 jan: Minimal Viable Product finished
-28 jan: data analysis finished
-31 jan: presentation finished
+15 jan: finish collecting necessary data/sources<br/>
+25 jan: Minimal Viable Product finished<br/>
+28 jan: data analysis finished<br/>
+31 jan: presentation finished<br/>
 2 feb: presentations
