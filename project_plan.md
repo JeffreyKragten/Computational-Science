@@ -1,6 +1,6 @@
 # Project plan
 ## Project title (max. 200 characters): <fill this last, after the other details are decided>
-Team members: <Ray Pelupessi; Luuk van der Waals; Jeffrey Kragten>
+Team members: <Ray Pelupessy; Luuk van der Waals; Jeffrey Kragten>
 Team number and team name (optional):
 
 ## Scientific question (max. 350 words)
@@ -13,19 +13,21 @@ across multiple generations, and whether the percentage of deaf people in the co
 affects the number of signers.
 
 ## Numerical method (max 100 words)
-<State the chosen numerical method and describe the way that you intend to use AND validate your 
-model.>
+We will used an agent-based model to simulate the spread and retention of sign language in a population.
+The agents in our simluation are persons with (primarily familial) relations to each other. The agents
+will age and start families and other relational bonds, these bonds have the potention to spread or retain
+sign language. We will validate our model by comparing it to the spread and retention seen in the data of (Mudd et al., 2020).
 
 ## Provisioned tools (max 100 words): 
 We plan one using python in Jupyter Notebook. Although programs like NetLogo are specialised in Agent-Based models, 
 these are more focused on the 2d simulations while we are more focused on the network of the people. 
 In python we have the freedom to create a network with agents in the way we want for our model.
-<<Visualization tools??>
+We will use the python module matplotlib for visualization of data.
 
 ## Plan for division of work (max 100 words):
 We will all be part of the decision processes with regards to the scientific question, the method of investigation,
 the tools we use and the planned timeline. Subsequently, we will all work on the coding of our model,
-the literature study and writing the report. However, Rae will be ultimately responsible for the literature study,
+the literature study and writing the report. However, Ray will be ultimately responsible for the literature study,
 Luuk and Jeffrey will be ultimately responsible for the building of the model,
 and all three will be responsible for the (design) choices and analysis written in the report.
 
