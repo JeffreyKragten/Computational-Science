@@ -2,6 +2,9 @@ import mesa
 import random
 from agent import Person
 
+
+# model_reporters={"percentage_of_signers": self.percentage_signers
+
 class SignModel(mesa.Model):
     def __init__(self, n, m, d, c):
         self.num_agents = n
@@ -10,6 +13,8 @@ class SignModel(mesa.Model):
         self.schedule = mesa.time.RandomActivation(self)
         self.agents_age_1 = []
         self.kill_agents = []
+        self.running = True
+        self.datacollector = mesa.DataCollector(model_reporters={"agent_count": lambda m: m.schedule.get_agent_count() })
         for i in range(self.num_agents):
             deafness = True if random.random() < d else False
             a = Person(i, self, 0, None, None, None, deafness)
@@ -18,9 +23,15 @@ class SignModel(mesa.Model):
 
     def step(self):
         self.kill_agents = []
+        self.datacollector.collect(self)
         self.schedule.step()
         for i in self.kill_agents:
             self.schedule.remove(i)
+
+    def percentage_signers(self):
+        agents = self.schedule.agents
+        num_signers = len([agent for agent in agents if agent.sign_lang == 1])
+        return num_signers / self.num_agents
 
 
     def marry(self):
