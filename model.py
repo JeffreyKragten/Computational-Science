@@ -2,7 +2,6 @@ import mesa
 import random
 from agent import Person
 
-
 # model_reporters={"percentage_of_signers": self.percentage_signers
 # "agent_count": lambda m: m.schedule.get_agent_count()
 
@@ -15,17 +14,21 @@ class SignModel(mesa.Model):
         self.agents_age_1 = []
         self.kill_agents = []
         self.running = True
-        self.datacollector = mesa.DataCollector(model_reporters={"percentage_of_signers": self.percentage_signers})
+        self.datacollector = mesa.DataCollector(model_reporters={"agent_count": lambda m: m.schedule.get_agent_count()})
         for i in range(self.num_agents):
             deafness = True if random.random() < d else False
             a = Person(i, self, 0, None, None, None, deafness)
             self.schedule.add(a)
+            self.agents_age_1.append(a)
 
 
     def step(self):
         self.kill_agents = []
         self.datacollector.collect(self)
         self.schedule.step()
+        self.age()
+        self.marry()
+        self.new_gen()
         for i in self.kill_agents:
             self.schedule.remove(i)
 
@@ -44,13 +47,12 @@ class SignModel(mesa.Model):
                 while found == False:
                     partner = random.choice(self.agents_age_1)
                     """ Boolean logic to ensure deaf person marries deaf person at required percentage"""
-                    if partner.married == False and (partner.deafness or no_require_deaf):
+                    if partner.deafness or no_require_deaf:
                         found = self.wedding(agent, partner)
             else:
                 while found == False:
                     partner = random.choice(self.agents_age_1)
-                    if partner.married == False:
-                        found = self.wedding(agent, partner)
+                    found = self.wedding(agent, partner)
 
 
     def wedding(self, agent, partner):
@@ -72,20 +74,11 @@ class SignModel(mesa.Model):
 
 
     def age(self):
-        agents = self.schedule.agent_buffer()
-        debug_num = 0
-        while True:
-            try:
-                agent = next(agents)
-                if agent.age == 0:
-                    self.agents_age_1.append(agent)
-                # if agent.age == 1:
-                #     self.agents_age_1.remove(agent)
-                agent.age += 1
-                debug_num += 1
-            except StopIteration:
-                break
-            print(f"Aged {debug_num} agents!")
+        agents = self.schedule.agents
+        for agent in agents:
+            if agent.age == 0:
+                self.agents_age_1.append(agent)
+            agent.age += 1
 
 
 
