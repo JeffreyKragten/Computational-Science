@@ -3,7 +3,7 @@ from random import choice
 
 class Person(Agent):
     def __init__(self, id, model, sign_lang=0, parents=(), partner=None, children=[], deafness=False):
-        super(id, model)
+        super().__init__(id, model)
         self.age = 0
         self.sex = "male" if choice([False, True]) else "female"
         self.sign_lang = sign_lang
@@ -14,14 +14,14 @@ class Person(Agent):
         self.genes = None
         self.married = False
 
-        for parent in self.parents:
-            parent.children.append(self)
+        # for parent in self.parents:
+        #     parent.children.append(self)
 
         if self.partner:
             self.partner.partner = self
 
-        for child in self.children:
-            child.parents.append(self)
+        # for child in self.children:
+        #     child.parents.append(self)
 
     def get_family(self):
         """

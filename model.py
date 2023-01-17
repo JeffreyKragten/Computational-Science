@@ -3,15 +3,15 @@ import random
 from agent import Person
 
 class SignModel(mesa.Model):
-    def __init__(self, N, M, D, C):
-        self.num_agents = N
-        self.total_agents = N
-        self.assortative_marriage = M
+    def __init__(self, n, m, d, c):
+        self.num_agents = n
+        self.total_agents = n
+        self.assortative_marriage = m
         self.schedule = mesa.time.RandomActivation(self)
         self.agents_age_1 = []
         self.kill_agents = []
         for i in range(self.num_agents):
-            deafness = True if random.random() < D else False
+            deafness = True if random.random() < d else False
             a = Person(i, self, 0, None, None, None, deafness)
             self.schedule.add(a)
 
