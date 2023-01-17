@@ -4,6 +4,7 @@ from agent import Person
 
 
 # model_reporters={"percentage_of_signers": self.percentage_signers
+# "agent_count": lambda m: m.schedule.get_agent_count()
 
 class SignModel(mesa.Model):
     def __init__(self, n, m, d, c):
@@ -14,7 +15,7 @@ class SignModel(mesa.Model):
         self.agents_age_1 = []
         self.kill_agents = []
         self.running = True
-        self.datacollector = mesa.DataCollector(model_reporters={"agent_count": lambda m: m.schedule.get_agent_count() })
+        self.datacollector = mesa.DataCollector(model_reporters={"percentage_of_signers": self.percentage_signers})
         for i in range(self.num_agents):
             deafness = True if random.random() < d else False
             a = Person(i, self, 0, None, None, None, deafness)
