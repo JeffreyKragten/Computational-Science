@@ -3,13 +3,16 @@ import random
 from agent import Person
 
 class SignModel(mesa.Model):
-    def __init__(self, N):
+    def __init__(self, N, M, D, C):
         self.num_agents = N
         self.total_agents = N
+        self.assortative_marriage = M
         self.schedule = mesa.time.RandomActivation(self)
         self.agents_age_1 = []
+        self.kill_agents = []
         for i in range(self.num_agents):
-            a = Person(i, self, 0, None, None, None)
+            deafness = True if random.random() < D else False
+            a = Person(i, self, 0, None, None, None, deafness)
             self.schedule.add(a)
 
 
@@ -25,25 +28,27 @@ class SignModel(mesa.Model):
             self.agents_age_1.remove(agent)
             found = False
             if agent.deafness == True:
-                no_require_deaf = True
-                if random.random() < self.assortative_marriage:
-                    no_require_deaf = False
+                no_require_deaf = False if random.random() < self.assortative_marriage else True
                 while found == False:
                     partner = random.choice(self.agents_age_1)
                     """ Boolean logic to ensure deaf person marries deaf person at required percentage"""
                     if partner.married == False and (partner.deafness or no_require_deaf):
-                        partner.partner = agent
-                        agent.partner = partner
-                        found == True
-                        self.agents_age_1.remove(partner)
+                        found = self.wedding(agent, partner)
             else:
                 while found == False:
                     partner = random.choice(self.agents_age_1)
-                    if partner.age == 1 and partner.married == False:
-                        partner.partner = agent
-                        agent.partner = partner
-                        found == True
-                        self.agents_age_1.remove(partner)
+                    if partner.married == False:
+                        found = self.wedding(agent, partner)
+
+
+    def wedding(self, agent, partner):
+        agent.partner = partner
+        agent.married = True
+        partner.partner = agent
+        partner.married = True
+        self.agents_age_1.remove(partner)
+        return True
+
 
     def new_gen(self):
         for k in range(self.total_agents, self.num_agents + self.total_agents):
@@ -54,7 +59,6 @@ class SignModel(mesa.Model):
         self.total_agents += self.num_agents
 
 
-
     def age(self):
         agents = self.schedule.agent_buffer()
         debug_num = 0
@@ -63,8 +67,8 @@ class SignModel(mesa.Model):
                 agent = next(agents)
                 if agent.age == 0:
                     self.agents_age_1.append(agent)
-                if agent.age == 1:
-                    self.agents_age_1.remove(agent)
+                # if agent.age == 1:
+                #     self.agents_age_1.remove(agent)
                 agent.age += 1
                 debug_num += 1
             except StopIteration:

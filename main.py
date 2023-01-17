@@ -1,7 +1,7 @@
 from mesa.batchrunner import batch_run
 from multiprocessing import freeze_support
 import pandas as pd
-from model_file import Model
+from model import SignModel
 
 
 def main():
@@ -12,7 +12,7 @@ def main():
 
     # batch runs the model
     results = batch_run(
-        Model,
+        SignModel,
         parameters=parameters,
         iterations=1,
         max_steps=generations,
@@ -20,9 +20,9 @@ def main():
         data_collection_period=1,
         display_progress=True,
     )
-    
+
     results_df = pd.DataFrame(results)
     results_df.to_csv(f'results/results.csv')
-    
+
 if __name__ == "__main__":
     main()
