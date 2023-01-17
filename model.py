@@ -28,7 +28,7 @@ class SignModel(mesa.Model):
         chances = [d, (c / 2), (c / 2), h]
         agent_genes = random.choices(possible_genes, chances)
         return agent_genes[0]
-    
+
     def inherit_genes(self, parents):
         gene_1 = random.choice(parents[0].genes)
         gene_2 = random.choice(parents[1].genes)
@@ -37,9 +37,9 @@ class SignModel(mesa.Model):
             deafness = True
         else:
             deafness = False
-            
+
         return (deafness, child_genes)
-        
+
     def step(self):
         self.kill_agents = []
         self.datacollector.collect(self)
@@ -57,15 +57,18 @@ class SignModel(mesa.Model):
 
 
     def marry(self):
+        total_deaf = 0
         for agent in self.agents_age_1:
             self.agents_age_1.remove(agent)
             found = False
             if agent.deafness == True:
+                total_deaf += 1
+                print(total_deaf)
                 no_require_deaf = False if random.random() < self.assortative_marriage else True
                 while found == False:
                     partner = random.choice(self.agents_age_1)
                     """ Boolean logic to ensure deaf person marries deaf person at required percentage"""
-                    if partner.deafness or no_require_deaf:
+                    if partner.deafness or no_require_deaf or True: # Need to decide what to do in case of odd number of deaf people
                         found = self.wedding(agent, partner)
             else:
                 while found == False:
