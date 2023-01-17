@@ -38,10 +38,11 @@ class Person(Agent):
         return self.parents + [parent.get_parents() for parent in self.parents]
 
     def die(self):
-        for child in self.children:
-            child.parents.remove(self)
+        if self.children is not None:
+            for child in self.children:
+                child.parents.remove(self)
         self.model.kill_agents.append(self)
 
     def step(self):
         if self.age > 2:
-            self.die(self)
+            self.die()
