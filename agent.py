@@ -40,8 +40,8 @@ class Person(Agent):
     def die(self):
         for child in self.children:
             child.parents.remove(self)
+        self.model.kill_agents.append(self)
 
     def step(self):
         if self.age > 2:
-            self.model.kill_agents.append(self)
             self.die(self)
