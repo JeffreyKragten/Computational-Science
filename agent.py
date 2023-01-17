@@ -29,7 +29,7 @@ class Person(Agent):
         himself.
         """
 
-        return [self, self.partner] + self.get_children() + self.get_parents()
+        return self.parents[0].children + [self.partner] + self.get_children() + self.get_parents()
 
     def get_children(self):
         return self.children + [child.get_children() for child in self.children]
