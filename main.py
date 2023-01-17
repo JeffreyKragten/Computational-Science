@@ -2,7 +2,7 @@ from mesa.batchrunner import batch_run
 from multiprocessing import freeze_support
 import pandas as pd
 from model import SignModel
-
+import os
 
 def main():
     freeze_support()
@@ -22,6 +22,8 @@ def main():
     )
 
     results_df = pd.DataFrame(results)
+    if not os.path.exists("results"):
+        os.makedirs("results")
     results_df.to_csv(f'results/results.csv')
 
 if __name__ == "__main__":
