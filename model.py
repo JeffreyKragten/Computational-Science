@@ -17,11 +17,29 @@ class SignModel(mesa.Model):
         self.running = True
         self.datacollector = mesa.DataCollector(model_reporters={"percentage_of_signers": self.percentage_signers})
         for i in range(self.num_agents):
-            deafness = True if random.random() < d else False
+            deafness, genes = self.init_genes(d, c)
             a = Person(i, self, 0, None, None, None, deafness)
             self.schedule.add(a)
 
-
+    def init_genes(self, d, c):
+        # possible_genes = [("deaf", "dd"), ("carrying", "Dd"), ("carrying", "dD"), ("hearing", "DD")]
+        possible_genes = [(True, "dd"), (False, "Dd"), (False, "dD"), (False, "DD")]
+        h = 1 - d - c
+        chances = [d, (c / 2), (c / 2), h]
+        agent_genes = random.choices(possible_genes, chances)
+        return agent_genes[0]
+    
+    def inherit_genes(self, parents):
+        gene_1 = random.choice(parents[0].genes)
+        gene_2 = random.choice(parents[1].genes)
+        child_genes = gene_1 + gene_2
+        if child_genes == "dd":
+            deafness = True
+        else:
+            deafness = False
+            
+        return (deafness, child_genes)
+        
     def step(self):
         self.kill_agents = []
         self.datacollector.collect(self)
