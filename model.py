@@ -18,7 +18,7 @@ class SignModel(mesa.Model):
         self.datacollector = mesa.DataCollector(model_reporters={"agent_count": lambda m: m.schedule.get_agent_count(), "percentage_signers": self.percentage_signers, "percentage_deaf": self.percentage_deaf, "percentage_carry": self.percentage_carry, "percentage_dd": self.double_d})
         for i in range(self.num_agents):
             deafness, genes = self.init_genes(d, c)
-            a = Person(i, self, 0, None, None, None, deafness, genes)
+            a = Person(i, self, deafness, genes, 0)
             self.schedule.add(a)
 
 
@@ -98,7 +98,7 @@ class SignModel(mesa.Model):
             agent = random.choice(self.married)
             partner = agent.partner
             deafness, genes = self.inherit_genes((agent, partner))
-            child = Person(k, self, 0, (agent, partner), None, None, deafness, genes)
+            child = Person(k, self, deafness, genes, 0, (agent, partner))
             self.schedule.add(child)
         self.total_agents += self.num_agents
 
