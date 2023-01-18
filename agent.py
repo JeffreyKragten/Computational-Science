@@ -2,7 +2,7 @@ from mesa import Agent
 from random import choice
 
 class Person(Agent):
-    def __init__(self, id, model, deafness=False, genes="DD", sign_lang=0, parents=[], partner=None, children=[]):
+    def __init__(self, id, model, deafness=False, genes="DD", sign_lang=0, parents=None, partner=None, children=[]):
         super().__init__(id, model)
         self.age = 0
         self.sex = "male" if choice([False, True]) else "female"
@@ -13,14 +13,15 @@ class Person(Agent):
         self.deafness = deafness
         self.genes = genes
 
-        # for parent in self.parents:
-        #     parent.children.append(self)
+        if self.parents:
+            for parent in list(self.parents):
+                parent.children.append(self)
 
         if self.partner:
             self.partner.partner = self
 
         # for child in self.children:
-        #     child.parents.append(self)
+        #     child.parents = tuple(list(child.parents) + [self])
 
     def get_family(self):
         """
@@ -39,12 +40,8 @@ class Person(Agent):
     def get_parents(self):
         return self.parents + [parent.get_parents() for parent in self.parents]
 
-    def die(self):
-        if self.children is not None:
-            for child in self.children:
-                child.parents.remove(self)
-        self.model.kill_agents.append(self)
-
     def step(self):
-        if self.age > 2:
-            self.die()
+        if self.age == 2:
+            self.parents = None
+        elif self.age > 2:
+            self.model.kill_agents.append(self)
