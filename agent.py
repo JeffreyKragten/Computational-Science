@@ -12,7 +12,6 @@ class Person(Agent):
         self.children = children
         self.deafness = deafness
         self.genes = None
-        self.married = False
 
         # for parent in self.parents:
         #     parent.children.append(self)
