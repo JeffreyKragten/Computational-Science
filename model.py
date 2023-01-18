@@ -19,8 +19,7 @@ class SignModel(mesa.Model):
             {"agent_count": lambda m: m.schedule.get_agent_count(),
              "percentage_signers": self.percentage_signers,
              "percentage_deaf": self.percentage_deaf,
-             "percentage_carry": self.percentage_carry,
-             "percentage_dd": self.double_d})
+             "percentage_carry": self.percentage_carry})
         for i in range(self.num_agents):
             deafness, genes = self.init_genes(d, c)
             a = Person(i, self, deafness, genes, 0)
