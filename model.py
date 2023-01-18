@@ -15,14 +15,11 @@ class SignModel(mesa.Model):
         self.married = []
         self.kill_agents = []
         self.running = True
-        self.datacollector = mesa.DataCollector(model_reporters={"agent_count": lambda m: m.schedule.get_agent_count(), "percentage_dd": self.double_d})
+        self.datacollector = mesa.DataCollector(model_reporters={"agent_count": lambda m: m.schedule.get_agent_count(), "percentage_signers": self.percentage_signers, "percentage_deaf": self.percentage_deaf, "percentage_dd": self.double_d})
         for i in range(self.num_agents):
             deafness, genes = self.init_genes(d, c)
             a = Person(i, self, 0, None, None, None, deafness, genes)
             self.schedule.add(a)
-
-    def double_d(self):
-        return 100 * len([agent for agent in self.schedule.agents if agent.genes == 'dd']) / self.schedule.get_agent_count()
 
 
     def step(self):
@@ -61,6 +58,14 @@ class SignModel(mesa.Model):
         agents = self.schedule.agents
         num_signers = len([agent for agent in agents if agent.sign_lang == 1])
         return num_signers / self.num_agents
+
+
+    def percentage_deaf(self):
+        return 100 * len([agent for agent in self.schedule.agents if agent.deafness]) / self.schedule.get_agent_count()
+
+
+    def double_d(self):
+        return 100 * len([agent for agent in self.schedule.agents if agent.genes == 'dd']) / self.schedule.get_agent_count()
 
 
     def marry(self):
