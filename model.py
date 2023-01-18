@@ -64,6 +64,10 @@ class SignModel(mesa.Model):
         return 100 * len([agent for agent in self.schedule.agents if agent.deafness]) / self.schedule.get_agent_count()
 
 
+    def percentage_carry(self):
+        return 100 * len([agent for agent in self.schedule.agents if agent.genes != "DD"]) / self.schedule.get_agent_count()
+
+
     def double_d(self):
         return 100 * len([agent for agent in self.schedule.agents if agent.genes == 'dd']) / self.schedule.get_agent_count()
 
