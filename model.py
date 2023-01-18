@@ -19,7 +19,7 @@ class SignModel(mesa.Model):
             deafness, genes = self.init_genes(d, c)
             a = Person(i, self, 0, None, None, None, deafness)
             self.schedule.add(a)
-            #self.agents_age_1.append(a)
+
 
     def init_genes(self, d, c):
         # possible_genes = [("deaf", "dd"), ("carrying", "Dd"), ("carrying", "dD"), ("hearing", "DD")]
@@ -28,6 +28,7 @@ class SignModel(mesa.Model):
         chances = [d, (c / 2), (c / 2), h]
         agent_genes = random.choices(possible_genes, chances)
         return agent_genes[0]
+
 
     def inherit_genes(self, parents):
         gene_1 = random.choice(parents[0].genes)
@@ -40,6 +41,7 @@ class SignModel(mesa.Model):
 
         return (deafness, child_genes)
 
+
     def step(self):
         self.kill_agents = []
         self.age()
@@ -50,30 +52,11 @@ class SignModel(mesa.Model):
         self.new_gen()
         self.datacollector.collect(self)
 
+
     def percentage_signers(self):
         agents = self.schedule.agents
         num_signers = len([agent for agent in agents if agent.sign_lang == 1])
         return num_signers / self.num_agents
-
-
-    def marry(self):
-        total_deaf = 0
-        for agent in self.agents_age_1:
-            self.agents_age_1.remove(agent)
-            found = False
-            if agent.deafness == True:
-                total_deaf += 1
-                print(total_deaf)
-                no_require_deaf = False if random.random() < self.assortative_marriage else True
-                while found == False:
-                    partner = random.choice(self.agents_age_1)
-                    """ Boolean logic to ensure deaf person marries deaf person at required percentage"""
-                    if partner.deafness or no_require_deaf or True: # Need to decide what to do in case of odd number of deaf people
-                        found = self.wedding(agent, partner)
-            else:
-                while found == False:
-                    partner = random.choice(self.agents_age_1)
-                    found = self.wedding(agent, partner)
 
 
     def marry(self):
@@ -109,67 +92,3 @@ class SignModel(mesa.Model):
             if agent.age == 0:
                 self.agents_age_1.append(agent)
             agent.age += 1
-
-
-
-
-# INITIAL_POP = 10
-# INITIAL_PROFICIENCY = 0.5
-# ITERATIONS = 3
-# MARRIAGES = 2
-
-
-# class Person:
-#     def __init__(self, sign_lang, parent1, parent2):
-#         self.age = 1
-#         self.sign_lang = sign_lang
-#         self.parent1 = parent1
-#         self.parent2 = parent2
-#         self.partner = None
-#         self.child = None
-
-
-# # Initialize population. First generation has no parents.
-# persons_unmarried = list()
-# persons_married = list()
-# for i in range(INITIAL_POP):
-#     persons_unmarried.append(Person(INITIAL_PROFICIENCY, None, None))
-
-
-# def learn(sign_1, sign_2):
-#     return (sign_1 + sign_2) / 3
-
-# def marry(num):
-#     for j in range(num):
-#         parent1 = persons_unmarried[j]
-#         parent2 = persons_unmarried[j + num]
-#         parent1.partner = parent2
-#         parent2.partner = parent1
-#         proficiency = learn(parent1.sign_lang, parent2.sign_lang)
-#         baby = Person(proficiency, parent1, parent2)
-#         persons_unmarried.append(baby)
-#         persons_married.append(parent1)
-#         persons_unmarried.remove(parent1)
-#         persons_married.append(parent2)
-#         persons_unmarried.remove(parent2)
-#         parent1.child = baby
-#         parent2.child = baby
-
-# def age():
-#     for person in persons_unmarried:
-#         person.age += 1
-#     for person in persons_married:
-#         person.age += 1
-
-# def average(lst):
-#     return sum(lst) / len(lst)
-
-# def run():
-#     for j in range(ITERATIONS):
-#         age()
-#         marry(MARRIAGES)
-#         print(average([p.sign_lang for p in persons_unmarried]))
-#         print(f"Round: {j}, unmarried: {len(persons_unmarried)}, married: {len(persons_married)}")
-
-
-# run()
