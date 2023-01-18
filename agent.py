@@ -2,7 +2,7 @@ from mesa import Agent
 from random import choice
 
 class Person(Agent):
-    def __init__(self, id, model, sign_lang=0, parents=(), partner=None, children=[], deafness=False):
+    def __init__(self, id, model, sign_lang=0, parents=(), partner=None, children=[], deafness=False, genes=None):
         super().__init__(id, model)
         self.age = 0
         self.sex = "male" if choice([False, True]) else "female"
@@ -11,7 +11,7 @@ class Person(Agent):
         self.partner = partner
         self.children = children
         self.deafness = deafness
-        self.genes = None
+        self.genes = genes
 
         # for parent in self.parents:
         #     parent.children.append(self)

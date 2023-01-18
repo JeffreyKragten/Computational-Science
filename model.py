@@ -11,14 +11,26 @@ class SignModel(mesa.Model):
         self.total_agents = n
         self.assortative_marriage = m
         self.schedule = mesa.time.RandomActivation(self)
-        self.agents_age_1 = []
+        self.to_be_married = []
+        self.married = []
         self.kill_agents = []
         self.running = True
         self.datacollector = mesa.DataCollector(model_reporters={"agent_count": lambda m: m.schedule.get_agent_count()})
         for i in range(self.num_agents):
             deafness, genes = self.init_genes(d, c)
-            a = Person(i, self, 0, None, None, None, deafness)
+            a = Person(i, self, 0, None, None, None, deafness, genes)
             self.schedule.add(a)
+
+
+    def step(self):
+        self.kill_agents = []
+        self.age()
+        self.schedule.step()
+        for i in self.kill_agents:
+            self.schedule.remove(i)
+        self.marry()
+        self.new_gen()
+        self.datacollector.collect(self)
 
 
     def init_genes(self, d, c):
@@ -42,17 +54,6 @@ class SignModel(mesa.Model):
         return (deafness, child_genes)
 
 
-    def step(self):
-        self.kill_agents = []
-        self.age()
-        self.schedule.step()
-        for i in self.kill_agents:
-            self.schedule.remove(i)
-        self.marry()
-        self.new_gen()
-        self.datacollector.collect(self)
-
-
     def percentage_signers(self):
         agents = self.schedule.agents
         num_signers = len([agent for agent in agents if agent.sign_lang == 1])
@@ -60,28 +61,32 @@ class SignModel(mesa.Model):
 
 
     def marry(self):
-        for agent in self.agents_age_1:
-            self.agents_age_1.remove(agent)
+        while self.to_be_married:
+            agent = random.choice(self.to_be_married)
+            self.to_be_married.remove(agent)
             found = False
-            no_require_deaf = False if random.random() < self.assortative_marriage or agent.deafness == False else True
             while found == False:
-                partner = random.choice(self.agents_age_1)
-                if partner.deafness or no_require_deaf or True: # Need to decide what to do in case of odd number of deaf people
+                """Kind of a hack to place the chance here, but makes the program work."""
+                require_deaf = True if agent.deafness == True and random.random() < self.assortative_marriage else False
+                partner = random.choice(self.to_be_married)
+                if partner.deafness or not require_deaf or len(self.to_be_married) < 3:
                     found = self.wedding(agent, partner)
 
 
     def wedding(self, agent, partner):
         agent.partner = partner
         partner.partner = agent
-        self.agents_age_1.remove(partner)
+        self.to_be_married.remove(partner)
+        self.married.extend((agent, partner))
         return True
 
 
     def new_gen(self):
         for k in range(self.total_agents, self.num_agents + self.total_agents):
-            agent = random.choice(self.agents_age_1)
+            agent = random.choice(self.married)
             partner = agent.partner
-            child = Person(k, self, 0, (agent, partner), None, None)
+            deafness, genes = self.inherit_genes((agent, partner))
+            child = Person(k, self, 0, (agent, partner), None, None, deafness, genes)
             self.schedule.add(child)
         self.total_agents += self.num_agents
 
@@ -90,5 +95,7 @@ class SignModel(mesa.Model):
         agents = self.schedule.agents
         for agent in agents:
             if agent.age == 0:
-                self.agents_age_1.append(agent)
+                self.to_be_married.append(agent)
+            if agent.age == 1:
+                self.married.remove(agent)
             agent.age += 1
