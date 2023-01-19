@@ -29,6 +29,7 @@ class SignModel(mesa.Model):
 
 
     def step(self):
+        print(self.schedule.steps)
         self.kill_agents = []
         self.age()
         self.schedule.step()
@@ -91,10 +92,13 @@ class SignModel(mesa.Model):
 
     def marry(self):
         ndm, nkm = self.assortative_couples()
+        # print(ndm)
         for i in range(ndm):
             found = False
             while not found:
                 agent, partner = random.sample(self.to_be_married_deaf, 2)
+                # print(len(self.to_be_married_deaf))
+                # print(len(partner.get_siblings()))
                 if agent.deafness and partner.deafness: # and agent not in partner.get_siblings():
                     found = self.wedding(agent, partner)
                     self.to_be_married_deaf.remove(agent)
@@ -104,7 +108,7 @@ class SignModel(mesa.Model):
             found = False
             while not found:
                 agent, partner = random.sample(self.to_be_married_hearing, 2)
-                if not agent.deafness and not partner.deafness:
+                if not agent.deafness and not partner.deafness: #and agent not in partner.get_siblings():
                     found = self.wedding(agent, partner)
                     self.to_be_married_hearing.remove(agent)
                     self.to_be_married_hearing.remove(partner)

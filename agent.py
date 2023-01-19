@@ -32,7 +32,7 @@ class Person(Agent):
         return [self.partner] + self.get_siblings() + self.get_children() + self.get_parents()
 
     def get_siblings(self):
-        return self.parents[0].children
+        return self.parents[0].children if self.parents else []
 
     def get_children(self):
         return self.children + [child.get_children() for child in self.children]
