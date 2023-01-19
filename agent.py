@@ -14,14 +14,8 @@ class Person(Agent):
         self.genes = genes
 
         if self.parents:
-            for parent in list(self.parents):
+            for parent in self.parents:
                 parent.children.append(self)
-
-        if self.partner:
-            self.partner.partner = self
-
-        # for child in self.children:
-        #     child.parents = tuple(list(child.parents) + [self])
 
     def get_family(self):
         """
@@ -32,12 +26,28 @@ class Person(Agent):
         return [self.partner] + self.get_siblings() + self.get_children() + self.get_parents()
 
     def get_siblings(self):
-        return self.parents[0].children if self.parents else []
+        """
+        Returns the siblings of the person.
+        """
+
+        if not self.parents:
+            return []
+        siblings = self.parents[0].children.copy()
+        siblings.remove(self)
+        return siblings
 
     def get_children(self):
+        """
+        Returns the (grand)children of the person.
+        """
+
         return self.children + [child.get_children() for child in self.children]
 
     def get_parents(self):
+        """
+        Returns the (grand)parents of the person.
+        """
+
         return self.parents + [parent.get_parents() for parent in self.parents]
 
     def step(self):
