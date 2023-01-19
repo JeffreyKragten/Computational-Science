@@ -2,14 +2,14 @@ from mesa import Agent
 from random import choice
 
 class Person(Agent):
-    def __init__(self, id, model, deafness=False, genes="DD", sign_lang=0, parents=None, partner=None, children=[]):
+    def __init__(self, id, model, deafness=False, genes="DD", sign_lang=0, parents=None):
         super().__init__(id, model)
         self.age = 0
         self.sex = "male" if choice([False, True]) else "female"
         self.sign_lang = sign_lang
         self.parents = parents
-        self.partner = partner
-        self.children = children
+        self.partner = None
+        self.children = []
         self.deafness = deafness
         self.genes = genes
 
@@ -32,7 +32,7 @@ class Person(Agent):
         return [self.partner] + self.get_siblings() + self.get_children() + self.get_parents()
 
     def get_siblings(self):
-        return self.parents[0].children
+        return self.parents[0].children if self.parents else []
 
     def get_children(self):
         return self.children + [child.get_children() for child in self.children]

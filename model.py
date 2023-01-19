@@ -95,7 +95,7 @@ class SignModel(mesa.Model):
             found = False
             while not found:
                 agent, partner = random.sample(self.to_be_married_deaf, 2)
-                if agent.deafness and partner.deafness: # and agent not in partner.get_siblings():
+                if agent.deafness and partner.deafness and agent not in partner.get_siblings():
                     found = self.wedding(agent, partner)
                     self.to_be_married_deaf.remove(agent)
                     self.to_be_married_deaf.remove(partner)
