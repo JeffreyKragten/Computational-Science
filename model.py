@@ -29,7 +29,6 @@ class SignModel(mesa.Model):
 
 
     def step(self):
-        print(self.schedule.steps)
         self.kill_agents = []
         self.age()
         self.schedule.step()
