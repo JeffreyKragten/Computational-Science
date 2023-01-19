@@ -23,7 +23,10 @@ class Person(Agent):
         himself.
         """
 
-        return [self.partner] + self.get_siblings() + self.get_children() + self.get_parents()
+        return self.get_siblings() + self.get_children() + self.get_parents()
+
+    def get_extended_family(self):
+        return self.get_family() + [self.partner] + self.partner.get_family()
 
     def get_siblings(self):
         """
