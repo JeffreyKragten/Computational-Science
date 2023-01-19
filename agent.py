@@ -1,11 +1,10 @@
 from mesa import Agent
 
 class Person(Agent):
-    def __init__(self, id, model, deafness=False, genes="DD", sign_lang=0, parents=None, sex="male"):
+    def __init__(self, id, model, deafness=False, genes="DD", sign_lang=None, parents=None, sex="male"):
         super().__init__(id, model)
         self.age = 0
         self.sex = sex
-        self.sign_lang = sign_lang
         self.parents = parents
         self.partner = None
         self.children = []
@@ -15,32 +14,41 @@ class Person(Agent):
         if self.parents:
             for parent in self.parents:
                 parent.children.append(self)
+                
+        self.sign_lang = self.determine_language(sign_lang)
 
 
-    def determine_language(self):
-        if self.parents:
-            family_genes = (member.genes for member in self.get_extended_family())
-            if "dd" in family_genes:
-                return 1
+    def determine_language(self, input):
+        if not input:
+            family = self.get_family()
+            for member in family:
+                if member:
+                    if member.genes == "dd":
+                        return 1
+            # family_genes = (member.genes for member in self.get_family())
+            # if "dd" in family_genes:
+            #     return 1
         else:
-            return 0
+            return input
 
     def get_family(self):
         """
-        Returns the partner, (grand)children and (grant)parents and the person
+        Returns the partner, (grand)children and (grand)parents and the person
         himself.
         """
-
         return self.get_siblings() + self.get_children() + self.get_parents()
-
-    def get_extended_family(self):
-        return self.get_family() + [self.partner] + self.partner.get_family()
+    
+    def deaf_family_member(self):
+        family = self.get_family()
+        for person in family:
+            if person.deafness:
+                return True
+        return False
 
     def get_siblings(self):
         """
         Returns the siblings of the person.
         """
-
         if not self.parents:
             return []
         siblings = self.parents[0].children.copy()
@@ -52,14 +60,22 @@ class Person(Agent):
         Returns the (grand)children of the person.
         """
 
-        return self.children + [child.get_children() for child in self.children]
+        children = self.children
+        for child in self.children:
+            children += child.get_children()
+        return children
 
     def get_parents(self):
         """
         Returns the (grand)parents of the person.
         """
+        if not self.parents:
+            return []
 
-        return self.parents + [parent.get_parents() for parent in self.parents]
+        parents = list(self.parents)
+        for parent in self.parents:
+            parents += parent.get_parents()
+        return parents
 
     def step(self):
         if self.age == 2:

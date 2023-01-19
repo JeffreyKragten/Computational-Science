@@ -142,8 +142,22 @@ class SignModel(mesa.Model):
     def wedding(self, agent, partner):
         agent.partner = partner
         partner.partner = agent
+        self.share_language(agent, partner)
         self.married.extend((agent, partner))
         return True
+    
+    def share_language(self, agent, partner):
+        if agent.sign_lang and partner.sign_lang == 1:
+            return
+        elif agent.sign_lang and partner.sign_lang == 0:
+            return
+        else:
+            family_1 = agent.deaf_family_member() # return true if deaf person in family
+            family_2 = partner.deaf_family_member()
+            if family_1:
+                partner.sign_lang = 1
+            if family_2:
+                agent.sign_lang = 1
 
 
     def new_gen(self):
@@ -157,7 +171,7 @@ class SignModel(mesa.Model):
             agent = random.choice(self.married)
             partner = agent.partner
             deafness, genes = self.inherit_genes((agent, partner))
-            child = Person(k, self, deafness, genes, 0, (agent, partner), sex)
+            child = Person(k, self, deafness, genes, None, (agent, partner), sex)
             self.schedule.add(child)
         self.total_agents += self.num_agents
 
