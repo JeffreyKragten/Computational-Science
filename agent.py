@@ -1,11 +1,10 @@
 from mesa import Agent
-from random import choice
 
 class Person(Agent):
-    def __init__(self, id, model, deafness=False, genes="DD", sign_lang=0, parents=None):
+    def __init__(self, id, model, deafness=False, genes="DD", sign_lang=0, parents=None, sex="male"):
         super().__init__(id, model)
         self.age = 0
-        self.sex = "male" if choice([False, True]) else "female"
+        self.sex = sex
         self.sign_lang = sign_lang
         self.parents = parents
         self.partner = None
@@ -14,14 +13,9 @@ class Person(Agent):
         self.genes = genes
 
         if self.parents:
-            for parent in list(self.parents):
+            for parent in self.parents:
                 parent.children.append(self)
 
-        if self.partner:
-            self.partner.partner = self
-
-        # for child in self.children:
-        #     child.parents = tuple(list(child.parents) + [self])
         
     def determine_language(self):
         if self.parents:
@@ -37,15 +31,34 @@ class Person(Agent):
         himself.
         """
 
-        return [self.partner] + self.get_siblings() + self.get_children() + self.get_parents()
+        return self.get_siblings() + self.get_children() + self.get_parents()
+
+    def get_extended_family(self):
+        return self.get_family() + [self.partner] + self.partner.get_family()
 
     def get_siblings(self):
-        return self.parents[0].children if self.parents else []
+        """
+        Returns the siblings of the person.
+        """
+
+        if not self.parents:
+            return []
+        siblings = self.parents[0].children.copy()
+        siblings.remove(self)
+        return siblings
 
     def get_children(self):
+        """
+        Returns the (grand)children of the person.
+        """
+
         return self.children + [child.get_children() for child in self.children]
 
     def get_parents(self):
+        """
+        Returns the (grand)parents of the person.
+        """
+
         return self.parents + [parent.get_parents() for parent in self.parents]
 
     def step(self):
