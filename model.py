@@ -23,8 +23,8 @@ class SignModel(mesa.Model):
              "percentage_deaf": self.percentage_deaf,
              "percentage_carry": self.percentage_carry})
         for i in range(self.num_agents):
-            deafness, genes = self.init_genes(d, c)
-            a = Person(i, self, deafness, genes, 0)
+            deafness, genes, language = self.init_genes(d, c)
+            a = Person(i, self, deafness, genes, language)
             self.schedule.add(a)
 
 
@@ -40,12 +40,16 @@ class SignModel(mesa.Model):
 
 
     def init_genes(self, d, c):
-        # possible_genes = [("deaf", "dd"), ("carrying", "Dd"), ("carrying", "dD"), ("hearing", "DD")]
         possible_genes = [(True, "dd"), (False, "Dd"), (False, "dD"), (False, "DD")]
         h = 1 - d - c
         chances = [d, (c / 2), (c / 2), h]
         agent_genes = random.choices(possible_genes, chances)
-        return agent_genes[0]
+        agent_deafness, agent_genes = agent_genes[0]
+        if agent_deafness:
+            agent_language = 1
+        else:
+            agent_language = 0
+        return agent_deafness, agent_genes, agent_language
 
 
     def inherit_genes(self, parents):
@@ -58,7 +62,6 @@ class SignModel(mesa.Model):
             deafness = False
 
         return (deafness, child_genes)
-
 
     def percentage_signers(self):
         agents = self.schedule.agents

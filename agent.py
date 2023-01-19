@@ -22,6 +22,14 @@ class Person(Agent):
 
         # for child in self.children:
         #     child.parents = tuple(list(child.parents) + [self])
+        
+    def determine_language(self):
+        if self.parents:
+            family_genes = [member.genes for member in self.get_extended_family()]
+            if "dd" in family_genes:
+                return 1
+        else:
+            return 0
 
     def get_family(self):
         """
