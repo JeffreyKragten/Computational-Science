@@ -1,11 +1,10 @@
 from mesa import Agent
-from random import choice
 
 class Person(Agent):
-    def __init__(self, id, model, deafness=False, genes="DD", sign_lang=0, parents=None):
+    def __init__(self, id, model, deafness=False, genes="DD", sign_lang=0, parents=None, sex="male"):
         super().__init__(id, model)
         self.age = 0
-        self.sex = "male" if choice([False, True]) else "female"
+        self.sex = sex
         self.sign_lang = sign_lang
         self.parents = parents
         self.partner = None
