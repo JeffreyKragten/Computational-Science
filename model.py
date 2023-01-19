@@ -91,7 +91,7 @@ class SignModel(mesa.Model):
 
 
     def marry(self):
-        ndm, nkm = self.assortative_couples()
+        ndm, nhm = self.assortative_couples()
         # print(ndm)
         for i in range(ndm):
             found = False
@@ -104,7 +104,7 @@ class SignModel(mesa.Model):
                     self.to_be_married_deaf.remove(agent)
                     self.to_be_married_deaf.remove(partner)
 
-        for j in range(nkm):
+        for j in range(nhm):
             found = False
             while not found:
                 agent, partner = random.sample(self.to_be_married_hearing, 2)
