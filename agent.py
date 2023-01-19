@@ -16,10 +16,10 @@ class Person(Agent):
             for parent in self.parents:
                 parent.children.append(self)
 
-        
+
     def determine_language(self):
         if self.parents:
-            family_genes = [member.genes for member in self.get_extended_family()]
+            family_genes = (member.genes for member in self.get_extended_family())
             if "dd" in family_genes:
                 return 1
         else:
