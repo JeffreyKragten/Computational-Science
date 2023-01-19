@@ -7,11 +7,13 @@ from agent import Person
 
 class SignModel(mesa.Model):
     def __init__(self, n, m, d, c):
+        self.d = d
         self.num_agents = n
         self.total_agents = n
         self.assortative_marriage = m
         self.schedule = mesa.time.RandomActivation(self)
-        self.to_be_married = []
+        self.to_be_married_deaf = []
+        self.to_be_married_hearing = []
         self.married = []
         self.kill_agents = []
         self.running = True
@@ -74,28 +76,67 @@ class SignModel(mesa.Model):
             if agent.genes in ["dD", "Dd"]]) / self.schedule.get_agent_count()
 
 
+    # def marry(self):
+    #     while self.to_be_married:
+    #         agent = random.choice(self.to_be_married)
+    #         self.to_be_married.remove(agent)
+    #         found = False
+    #         while found == False:
+    #             """Kind of a hack to place the chance here, but makes the program work."""
+    #             require_deaf = True if agent.deafness == True and random.random() < self.assortative_marriage else False
+    #             partner = random.choice(self.to_be_married)
+    #             if partner.deafness or not require_deaf or len(self.to_be_married) < 3:
+    #                 found = self.wedding(agent, partner)
+
+
     def marry(self):
-        while self.to_be_married:
-            agent = random.choice(self.to_be_married)
-            self.to_be_married.remove(agent)
+        ndm, nkm = self.assortative_couples()
+        for i in range(ndm):
             found = False
-            while found == False:
-                """Kind of a hack to place the chance here, but makes the program work."""
-                require_deaf = True if agent.deafness == True and random.random() < self.assortative_marriage else False
-                partner = random.choice(self.to_be_married)
-                if partner.deafness or not require_deaf or len(self.to_be_married) < 3:
+            while not found:
+                agent, partner = random.sample(self.to_be_married_deaf, 2)
+                if agent.deafness and partner.deafness: # and agent not in partner.get_siblings():
                     found = self.wedding(agent, partner)
+                    self.to_be_married_deaf.remove(agent)
+                    self.to_be_married_deaf.remove(partner)
+
+        for j in range(nkm):
+            found = False
+            while not found:
+                agent, partner = random.sample(self.to_be_married_hearing, 2)
+                if not agent.deafness and not partner.deafness:
+                    found = self.wedding(agent, partner)
+                    self.to_be_married_hearing.remove(agent)
+                    self.to_be_married_hearing.remove(partner)
+
+        full_marriage_list = self.to_be_married_deaf + self.to_be_married_hearing
+        while full_marriage_list:
+            agent, partner = random.sample(full_marriage_list, 2)
+            self.wedding(agent, partner)
+            full_marriage_list.remove(agent)
+            full_marriage_list.remove(partner)
+        self.to_be_married_deaf = []
+        self.to_be_married_hearing = []
+
+
+    def amount_deaf(self):
+        return len([agent for agent in self.schedule.agents if agent.deafness and agent.age == 1])
+
+    def assortative_couples(self):
+        nd = len(self.to_be_married_deaf)
+        nk = self.num_agents - nd
+        return int((nd*self.assortative_marriage)/2), int((nk*self.assortative_marriage)/2)
 
 
     def wedding(self, agent, partner):
         agent.partner = partner
         partner.partner = agent
-        self.to_be_married.remove(partner)
         self.married.extend((agent, partner))
         return True
 
 
     def new_gen(self):
+        self.d = 0
         for k in range(self.total_agents, self.num_agents + self.total_agents):
             agent = random.choice(self.married)
             partner = agent.partner
@@ -109,7 +150,10 @@ class SignModel(mesa.Model):
         agents = self.schedule.agents
         for agent in agents:
             if agent.age == 0:
-                self.to_be_married.append(agent)
+                if agent.deafness:
+                    self.to_be_married_deaf.append(agent)
+                else:
+                    self.to_be_married_hearing.append(agent)
             if agent.age == 1:
                 self.married.remove(agent)
             agent.age += 1
