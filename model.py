@@ -85,41 +85,25 @@ class SignModel(mesa.Model):
     def marry(self):
         ndm, nhm = self.assortative_couples()
 
-        for i in range(ndm):
-            found = False
-            tries = 0
-            while not found:
-                tries += 1
-                agent, partner = random.sample(self.to_be_married_deaf, 2)
-                if self.able_to_marry(agent, partner) or tries > 5:
-                    found = self.wedding(agent, partner)
-                    self.to_be_married_deaf.remove(agent)
-                    self.to_be_married_deaf.remove(partner)
-
-        for j in range(nhm):
-            found = False
-            tries = 0
-            while not found:
-                tries += 1
-                agent, partner = random.sample(self.to_be_married_hearing, 2)
-                if self.able_to_marry(agent, partner) or tries > 5:
-                    found = self.wedding(agent, partner)
-                    self.to_be_married_hearing.remove(agent)
-                    self.to_be_married_hearing.remove(partner)
-
+        self.to_marry(self.to_be_married_deaf, ndm)
+        self.to_marry(self.to_be_married_hearing, nhm)
         full_marriage_list = self.to_be_married_deaf + self.to_be_married_hearing
-        tries = 0
-        while full_marriage_list:
-            tries += 1
-            agent, partner = random.sample(full_marriage_list, 2)
-            if self.able_to_marry(agent, partner) or tries > 5:
-                self.wedding(agent, partner)
-                full_marriage_list.remove(agent)
-                full_marriage_list.remove(partner)
-                tries = 0
+        self.to_marry(full_marriage_list, int(len(full_marriage_list)/2))
 
         self.to_be_married_deaf = []
         self.to_be_married_hearing = []
+
+    def to_marry(self, list, amount):
+        for i in range(amount):
+            found = False
+            tries = 0
+            while not found:
+                tries += 1
+                agent, partner = random.sample(list, 2)
+                if self.able_to_marry(agent, partner) or tries > 5:
+                    found = self.wedding(agent, partner)
+                    list.remove(agent)
+                    list.remove(partner)
 
 
     def amount_deaf(self):
@@ -145,7 +129,7 @@ class SignModel(mesa.Model):
         self.share_language(agent, partner)
         self.married.extend((agent, partner))
         return True
-    
+
     def share_language(self, agent, partner):
         if agent.sign_lang and partner.sign_lang == 1:
             return
@@ -185,4 +169,4 @@ class SignModel(mesa.Model):
                 else:
                     self.to_be_married_hearing.append(agent)
             agent.age += 1
-            self.married = []
+        self.married = []
