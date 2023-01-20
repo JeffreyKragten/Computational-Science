@@ -27,7 +27,7 @@ class SignModel(mesa.Model):
             if i >= self.num_agents / 2:
                 sex = "female"
             deafness, genes, language = self.init_genes(d, c)
-            a = Person(i, self, deafness, genes, language, sex=sex)
+            a = Person(i, self, deafness, genes, language)
             self.schedule.add(a)
 
 
@@ -144,16 +144,16 @@ class SignModel(mesa.Model):
 
     def new_gen(self):
         self.d = 0
-        num_women = self.num_agents / 2
+        # num_women = self.num_agents / 2
         for k in range(self.total_agents, self.num_agents + self.total_agents):
-            num_women -= 1
-            sex = "female"
-            if num_women > 0:
-                sex = "male"
+            # num_women -= 1
+            # sex = "female"
+            # if num_women > 0:
+            #     sex = "male"
             agent = random.choice(self.married)
             partner = agent.partner
             deafness, genes = self.inherit_genes((agent, partner))
-            child = Person(k, self, deafness, genes, None, (agent, partner), sex)
+            child = Person(k, self, deafness, genes, None, (agent, partner))
             self.schedule.add(child)
         self.total_agents += self.num_agents
 

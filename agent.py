@@ -1,10 +1,11 @@
 from mesa import Agent
+from random import choice
 
 class Person(Agent):
-    def __init__(self, id, model, deafness=False, genes="DD", sign_lang=None, parents=None, sex="male"):
+    def __init__(self, id, model, deafness=False, genes="DD", sign_lang=None, parents=None):
         super().__init__(id, model)
         self.age = 0
-        self.sex = sex
+        self.sex = choice(["male", "female"])
         self.parents = parents
         self.partner = None
         self.children = []
