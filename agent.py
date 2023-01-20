@@ -24,11 +24,7 @@ class Person(Agent):
             for member in family:
                 if member.genes == "dd":
                     return 1
-            # family_genes = (member.genes for member in self.get_family())
-            # if "dd" in family_genes:
-            #     return 1
-        else:
-            return input
+        return input
 
     def get_family(self):
         """
