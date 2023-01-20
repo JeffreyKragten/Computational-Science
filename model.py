@@ -48,10 +48,10 @@ class SignModel(mesa.Model):
         chances = [d, (c / 2), (c / 2), h]
         agent_genes = random.choices(possible_genes, chances)
         agent_deafness, agent_genes = agent_genes[0]
+        agent_language = 0
         if agent_deafness:
             agent_language = 1
-        else:
-            agent_language = 0
+
         return agent_deafness, agent_genes, agent_language
 
 
@@ -59,10 +59,9 @@ class SignModel(mesa.Model):
         gene_1 = random.choice(parents[0].genes)
         gene_2 = random.choice(parents[1].genes)
         child_genes = gene_1 + gene_2
+        deafness = False
         if child_genes == "dd":
             deafness = True
-        else:
-            deafness = False
 
         return (deafness, child_genes)
 
@@ -87,9 +86,8 @@ class SignModel(mesa.Model):
 
         self.to_marry(self.to_be_married_deaf, ndm)
         self.to_marry(self.to_be_married_hearing, nhm)
-        full_marriage_list = self.to_be_married_deaf + self.to_be_married_hearing
-        self.to_marry(full_marriage_list, int(len(full_marriage_list)/2))
-
+        remaining_marriage_list = self.to_be_married_deaf + self.to_be_married_hearing
+        self.to_marry(remaining_marriage_list, int(len(remaining_marriage_list)/2))
         self.to_be_married_deaf = []
         self.to_be_married_hearing = []
 
