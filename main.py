@@ -14,7 +14,7 @@ def main():
     results = batch_run(
         SignModel,
         parameters=parameters,
-        iterations=3,
+        iterations=10,
         max_steps=generations,
         number_processes=1,
         data_collection_period=1,
