@@ -3,8 +3,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def create_graph(args=[]):
-    category = args[1] if len(args) > 1 else "percentage_signers"
-    savefile = "{}/results/{}".format(sys.path[0], "results", args[2]) if len(args) > 2 else None
+    category = args[0] if len(args) > 0 else "percentage_signers"
+    savefile = "{}/results/{}".format(sys.path[0], args[1]) if len(args) > 1 else None
+    print(savefile)
     filename = "{}/results/results.csv".format(sys.path[0])
 
     with open(filename) as f:
@@ -24,4 +25,4 @@ def create_graph(args=[]):
         plt.show()
 
 if __name__ == "__main__":
-    create_graph(sys.argv)
+    create_graph(sys.argv[1:])
