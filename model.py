@@ -2,8 +2,6 @@ import mesa
 import random
 from agent import Person
 
-# model_reporters={"percentage_of_signers": self.percentage_signers
-# "agent_count": lambda m: m.schedule.get_agent_count()
 
 class SignModel(mesa.Model):
     def __init__(self, n, m, d, c):
@@ -29,7 +27,6 @@ class SignModel(mesa.Model):
 
     def step(self):
         self.kill_agents = []
-        self.married = []
         self.schedule.step()
         for i in self.kill_agents:
             self.schedule.remove(i)
@@ -63,6 +60,7 @@ class SignModel(mesa.Model):
 
 
     def marry(self):
+        self.married = []
         ndm, nhm = self.assortative_couples()
 
         self.to_marry(self.to_be_married_deaf, ndm)
@@ -107,16 +105,12 @@ class SignModel(mesa.Model):
 
 
     def share_language(self, agent, partner):
-        if agent.sign_lang and partner.sign_lang == 1:
-            return
-        elif agent.sign_lang and partner.sign_lang == 0:
+        if agent.sign_lang == partner.sign_lang:
             return
         else:
-            family_1 = agent.deaf_family_member() # return true if deaf person in family
-            family_2 = partner.deaf_family_member()
-            if family_1:
+            if agent.deaf_family_member():
                 partner.sign_lang = 1
-            if family_2:
+            if partner.deaf_family_member():
                 agent.sign_lang = 1
 
 
@@ -135,8 +129,7 @@ class SignModel(mesa.Model):
 
 
     def percentage_signers(self):
-        agents = self.schedule.agents
-        num_signers = len([agent for agent in agents if agent.sign_lang == 1])
+        num_signers = len([agent for agent in self.schedule.agents if agent.sign_lang == 1])
         return num_signers / self.agents_per_gen
 
 
