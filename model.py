@@ -130,7 +130,7 @@ class SignModel(mesa.Model):
 
     def percentage_signers(self):
         num_signers = len([agent for agent in self.schedule.agents if agent.sign_lang == 1])
-        return num_signers / self.agents_per_gen
+        return num_signers / self.schedule.get_agent_count()
 
 
     def percentage_deaf(self):
