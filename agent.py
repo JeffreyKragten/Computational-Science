@@ -21,10 +21,13 @@ class Person(Agent):
 
     def determine_language(self, input):
         if not input:
+            if self.deafness:
+                return 1
             family = self.get_family()
             for member in family:
                 if member.genes == "dd":
                     return 1
+            return 0
         return input
 
     def get_family(self):
@@ -34,12 +37,12 @@ class Person(Agent):
         """
         return self.get_siblings() + self.get_children() + self.get_parents()
 
-    def deaf_family_member(self):
-        family = self.get_family()
-        for person in family:
-            if person.deafness:
-                return True
-        return False
+    # def deaf_family_member(self):
+    #     family = self.get_family()
+    #     for person in family:
+    #         if person.deafness:
+    #             return True
+    #     return False
 
     def get_siblings(self):
         """

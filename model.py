@@ -17,6 +17,8 @@ class SignModel(mesa.Model):
         self.datacollector = mesa.DataCollector(model_reporters=
             {"agent_count": lambda m: m.schedule.get_agent_count(),
              "percentage_signers": self.percentage_signers,
+             "percentage_fluent_signers": self.percentage_fluent_signers,
+             "percentage_non_fluent_signers": self.percentage_non_fluent_signers,
              "percentage_deaf": self.percentage_deaf,
              "percentage_carry": self.percentage_carry})
         for i in range(self.agents_per_gen):
@@ -108,10 +110,12 @@ class SignModel(mesa.Model):
         if agent.sign_lang == partner.sign_lang:
             return
         else:
-            if agent.deaf_family_member():
-                partner.sign_lang = 1
-            if partner.deaf_family_member():
-                agent.sign_lang = 1
+            if agent.deafness == True and agent.sign_lang == 1:
+                if partner.sign_lang == 0:
+                    partner.sign_lang = 0.5
+            if partner.deafness == True and partner.sign_lang == 1:
+                if agent.sign_lang == 0:
+                    agent.sign_lang = 0.5
 
 
     def new_gen(self):
@@ -129,9 +133,19 @@ class SignModel(mesa.Model):
 
 
     def percentage_signers(self):
+        num_signers = len([agent for agent in self.schedule.agents if agent.sign_lang > 0])
+        return num_signers / self.schedule.get_agent_count()
+    
+    
+    def percentage_non_fluent_signers(self):
+        num_signers = len([agent for agent in self.schedule.agents if agent.sign_lang == 0.5])
+        return num_signers / self.schedule.get_agent_count()
+    
+    
+    def percentage_fluent_signers(self):
         num_signers = len([agent for agent in self.schedule.agents if agent.sign_lang == 1])
         return num_signers / self.schedule.get_agent_count()
-
+    
 
     def percentage_deaf(self):
         return len([agent for agent in self.schedule.agents
