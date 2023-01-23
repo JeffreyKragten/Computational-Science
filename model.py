@@ -27,7 +27,6 @@ class SignModel(mesa.Model):
 
     def step(self):
         self.kill_agents = []
-        self.married = []
         self.schedule.step()
         for i in self.kill_agents:
             self.schedule.remove(i)
@@ -61,6 +60,7 @@ class SignModel(mesa.Model):
 
 
     def marry(self):
+        self.married = []
         ndm, nhm = self.assortative_couples()
 
         self.to_marry(self.to_be_married_deaf, ndm)
