@@ -74,7 +74,13 @@ class Person(Agent):
         return parents
 
     def step(self):
+        if self.age == 0:
+            if self.deafness:
+                self.model.to_be_married_deaf.append(self)
+            else:
+                self.model.to_be_married_hearing.append(self)
         if self.age == 2:
             self.parents = None
         elif self.age > 2:
             self.model.kill_agents.append(self)
+        self.age += 1
