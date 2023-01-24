@@ -16,19 +16,21 @@ class Person(Agent):
             for parent in self.parents:
                 parent.children.append(self)
 
-        self.sign_lang = self.determine_language(sign_lang)
+        self.sign_lang = sign_lang if sign_lang != None else self.determine_language()
 
 
-    def determine_language(self, input):
-        if not input:
-            if self.deafness:
-                return 1
-            family = self.get_family()
-            for member in family:
-                if member.genes == "dd":
-                    return 1
+    def determine_language(self):
+        family = self.get_family()
+        # If nobody in the family is deaf or nobody speaks sign language.
+        if not (self.deafness or any(member.deafness > 0 for member in family)) \
+            or not any(member.sign_lang > 0 for member in family):
             return 0
-        return input
+
+        for member in family:
+            if member.sign_lang == 0:
+                member.sign_lang = 0.5
+
+        return 1 if any(parent.sign_lang == 1 for parent in self.parents) else 0.5
 
     def get_family(self):
         """
@@ -36,13 +38,6 @@ class Person(Agent):
         himself.
         """
         return self.get_siblings() + self.get_children() + self.get_parents()
-
-    # def deaf_family_member(self):
-    #     family = self.get_family()
-    #     for person in family:
-    #         if person.deafness:
-    #             return True
-    #     return False
 
     def get_siblings(self):
         """
