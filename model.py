@@ -43,9 +43,7 @@ class SignModel(mesa.Model):
         chances = [d, (c / 2), (c / 2), h]
         agent_genes = random.choices(possible_genes, chances)
         agent_deafness, agent_genes = agent_genes[0]
-        agent_language = 0
-        if agent_deafness:
-            agent_language = 1
+        agent_language = int(agent_deafness)
 
         return agent_deafness, agent_genes, agent_language
 
@@ -109,13 +107,13 @@ class SignModel(mesa.Model):
     def share_language(self, agent, partner):
         if agent.sign_lang == partner.sign_lang:
             return
-        else:
-            if agent.deafness == True and agent.sign_lang == 1:
-                if partner.sign_lang == 0:
-                    partner.sign_lang = 0.5
-            if partner.deafness == True and partner.sign_lang == 1:
-                if agent.sign_lang == 0:
-                    agent.sign_lang = 0.5
+
+        if agent.deafness == True and agent.sign_lang == 1:
+            if partner.sign_lang == 0:
+                partner.sign_lang = 0.5
+        if partner.deafness == True and partner.sign_lang == 1:
+            if agent.sign_lang == 0:
+                agent.sign_lang = 0.5
 
 
     def new_gen(self):
@@ -135,17 +133,17 @@ class SignModel(mesa.Model):
     def percentage_signers(self):
         num_signers = len([agent for agent in self.schedule.agents if agent.sign_lang > 0])
         return num_signers / self.schedule.get_agent_count()
-    
-    
+
+
     def percentage_non_fluent_signers(self):
         num_signers = len([agent for agent in self.schedule.agents if agent.sign_lang == 0.5])
         return num_signers / self.schedule.get_agent_count()
-    
-    
+
+
     def percentage_fluent_signers(self):
         num_signers = len([agent for agent in self.schedule.agents if agent.sign_lang == 1])
         return num_signers / self.schedule.get_agent_count()
-    
+
 
     def percentage_deaf(self):
         return len([agent for agent in self.schedule.agents
