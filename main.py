@@ -9,14 +9,14 @@ import sys
 def main():
     freeze_support()
     # parameters to run the model with
-    parameters = {"n": 728, "m": 0.58, "d": 0.022, "c": 0.172}
+    parameters = {"n": 728, "m": [0.38, 0.48, 0.58, 0.68, 0.78], "d": 0.022, "c": 0.172}
     generations = 50
 
     # batch runs the model
     results = batch_run(
         SignModel,
         parameters=parameters,
-        iterations=10,
+        iterations=2,
         max_steps=generations,
         number_processes=1,
         data_collection_period=1,
@@ -27,7 +27,9 @@ def main():
     if not os.path.exists("results"):
         os.makedirs("results")
     # results_df.to_csv(f'results/results_{parameters["m"]}_{parameters["d"]}_{parameters["c"]}.csv')
-    results_df.to_csv(f'results/results.csv')
+
+    for j in parameters['m']:
+        results_df[results_df['m'] == j].to_csv(f'results/results_{j}.csv')
 
     create_graph(sys.argv[1:], parameters)
 

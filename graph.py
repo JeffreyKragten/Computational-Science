@@ -3,9 +3,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def create_graph(args=[], parameters={}):
-    category = args[0] if len(args) > 0 else "percentage_non_fluent_signers"
+    # category = args[0] if len(args) > 0 else "percentage_non_fluent_signers"
+    category = "percentage_non_fluent_signers"
+    val = args[0] if len(args) > 0 else "0.58"
+
     savefile = "{}/results/{}".format(sys.path[0], args[1]) if len(args) > 1 else None
-    filename = "{}/results/results.csv".format(sys.path[0])
+    filename = "{}/results/results_".format(sys.path[0]) + f"{val}.csv"
 
     with open(filename) as f:
         categories = f.readline().rstrip().split(",")
