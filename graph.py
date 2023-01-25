@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 def create_graph(args=[], parameters={}):
     # category = args[0] if len(args) > 0 else "percentage_non_fluent_signers"
     category = "percentage_non_fluent_signers"
+    category_signers = "percentage_signers"
     val = args[0] if len(args) > 0 else "0.58"
 
     savefile = "{}/results/{}".format(sys.path[0], args[1]) if len(args) > 1 else None
@@ -18,6 +19,11 @@ def create_graph(args=[], parameters={}):
     category_data = data[:,categories.index(category)].reshape((-1, steps))
     final_percentage = np.median(category_data[:,-1]) * 100
 
+    category_data_signers = data[:,categories.index(category_signers)].reshape((-1, steps))
+    final_percentage_signers = np.median(category_data_signers[:,-1]) * 100
+
+    ratio = final_percentage / final_percentage_signers
+
     plt.plot(np.median(category_data, axis=0))
     plt.fill_between(np.arange(steps),
                     *np.percentile(category_data, [25, 75], axis=0), alpha=.2)
@@ -28,7 +34,7 @@ def create_graph(args=[], parameters={}):
     d = data[:,categories.index("d")][0]
     c = data[:,categories.index("c")][0]
 
-    plt.title(f"Final percentage: {'%.2f' % final_percentage}%. n: {n}, m: {m}, d: {d}, c: {c}")
+    plt.title(f"Final percentage: {'%.2f' % final_percentage}%. Ratio: {'%.2f' % ratio}. \nn: {n}, m: {m}, d: {d}, c: {c}")
 
     if savefile:
         plt.savefig(savefile)

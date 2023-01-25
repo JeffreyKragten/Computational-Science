@@ -9,14 +9,14 @@ import sys
 def main():
     freeze_support()
     # parameters to run the model with
-    parameters = {"n": 728, "m": [0.38, 0.48, 0.58, 0.68, 0.78], "d": 0.022, "c": 0.172}
+    parameters = {"n": 728, "m": [0, 0.025, 0.5, 0.075, 0.1, 0.125], "d": 0.022, "c": 0.172}
     generations = 50
 
     # batch runs the model
     results = batch_run(
         SignModel,
         parameters=parameters,
-        iterations=2,
+        iterations=100,
         max_steps=generations,
         number_processes=1,
         data_collection_period=1,
