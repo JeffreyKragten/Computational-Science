@@ -9,7 +9,7 @@ import sys
 def main():
     freeze_support()
     # parameters to run the model with
-    parameters = {"n": 750, "m": 0.58, "d": 0.022, "c": 0.176}
+    parameters = {"n": 728, "m": 0.58, "d": 0.022, "c": 0.172}
     generations = 50
 
     # batch runs the model
@@ -26,7 +26,8 @@ def main():
     results_df = pd.DataFrame(results)
     if not os.path.exists("results"):
         os.makedirs("results")
-    results_df.to_csv(f'results/results_{parameters["m"]}_{parameters["d"]}_{parameters["c"]}.csv')
+    # results_df.to_csv(f'results/results_{parameters["m"]}_{parameters["d"]}_{parameters["c"]}.csv')
+    results_df.to_csv(f'results/results.csv')
 
     create_graph(sys.argv[1:])
 

@@ -93,9 +93,7 @@ class SignModel(mesa.Model):
 
 
     def able_to_marry(self, agent, partner):
-        if agent.sex == partner.sex or agent in partner.get_siblings():
-            return False
-        return True
+        return not (agent.sex == partner.sex or agent in partner.get_siblings())
 
 
     def wedding(self, agent, partner):
@@ -109,13 +107,15 @@ class SignModel(mesa.Model):
     def share_language(self, agent, partner):
         if agent.sign_lang == partner.sign_lang:
             return
-        else:
-            if agent.deafness == True and agent.sign_lang == 1:
-                if partner.sign_lang == 0:
-                    partner.sign_lang = 0.5
-            if partner.deafness == True and partner.sign_lang == 1:
+
+        couple = (agent, partner)
+
+        if any(person.deafness for person in couple):
+            if any(person.sign_lang > 0 for person in couple):
                 if agent.sign_lang == 0:
                     agent.sign_lang = 0.5
+                if partner.sign_lang == 0:
+                    partner.sign_lang = 0.5
 
 
     def new_gen(self):
@@ -135,17 +135,17 @@ class SignModel(mesa.Model):
     def percentage_signers(self):
         num_signers = len([agent for agent in self.schedule.agents if agent.sign_lang > 0])
         return num_signers / self.schedule.get_agent_count()
-    
-    
+
+
     def percentage_non_fluent_signers(self):
         num_signers = len([agent for agent in self.schedule.agents if agent.sign_lang == 0.5])
         return num_signers / self.schedule.get_agent_count()
-    
-    
+
+
     def percentage_fluent_signers(self):
         num_signers = len([agent for agent in self.schedule.agents if agent.sign_lang == 1])
         return num_signers / self.schedule.get_agent_count()
-    
+
 
     def percentage_deaf(self):
         return len([agent for agent in self.schedule.agents

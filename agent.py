@@ -21,6 +21,7 @@ class Person(Agent):
 
     def determine_language(self):
         family = self.get_family()
+        print(len(family))
         # If nobody in the family is deaf or nobody speaks sign language.
         if not (self.deafness or any(member.deafness > 0 for member in family)) \
             or not any(member.sign_lang > 0 for member in family):
@@ -37,7 +38,7 @@ class Person(Agent):
         Returns the partner, (grand)children and (grand)parents and the person
         himself.
         """
-        return self.get_siblings() + self.get_children() + self.get_parents()
+        return self.get_siblings() + self.get_parents() + self.get_children()
 
     def get_siblings(self):
         """
