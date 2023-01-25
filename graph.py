@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def create_graph(args=[]):
-    category = args[0] if len(args) > 0 else "percentage_signers"
+    category = args[0] if len(args) > 0 else "percentage_non_fluent_signers"
     savefile = "{}/results/{}".format(sys.path[0], args[1]) if len(args) > 1 else None
     print(savefile)
     filename = "{}/results/results.csv".format(sys.path[0])
