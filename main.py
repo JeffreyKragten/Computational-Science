@@ -16,7 +16,7 @@ def main():
     results = batch_run(
         SignModel,
         parameters=parameters,
-        iterations=100,
+        iterations=10,
         max_steps=generations,
         number_processes=1,
         data_collection_period=1,
@@ -29,7 +29,7 @@ def main():
     # results_df.to_csv(f'results/results_{parameters["m"]}_{parameters["d"]}_{parameters["c"]}.csv')
     results_df.to_csv(f'results/results.csv')
 
-    create_graph(sys.argv[1:])
+    create_graph(sys.argv[1:], parameters)
 
 if __name__ == "__main__":
     main()
