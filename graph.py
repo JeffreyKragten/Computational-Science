@@ -2,7 +2,7 @@ import sys
 import numpy as np
 import matplotlib.pyplot as plt
 
-def create_graph(args=[], parameters=[]):
+def create_graph(args=[], parameters={}):
     category = args[0] if len(args) > 0 else "percentage_non_fluent_signers"
     savefile = "{}/results/{}".format(sys.path[0], args[1]) if len(args) > 1 else None
     filename = "{}/results/results.csv".format(sys.path[0])
@@ -18,7 +18,11 @@ def create_graph(args=[], parameters=[]):
     plt.plot(np.median(category_data, axis=0))
     plt.fill_between(np.arange(steps),
                     *np.percentile(category_data, [25, 75], axis=0), alpha=.2)
-    plt.title(f"Final percentage: {'%.2f' % final_percentage}%. n: {parameters['n']}, m: {parameters['m']}, d: {parameters['d']}, c: {parameters['c']}")
+
+    if parameters:
+        plt.title(f"Final percentage: {'%.2f' % final_percentage}%. n: {parameters['n']}, m: {parameters['m']}, d: {parameters['d']}, c: {parameters['c']}")
+    else:
+        plt.title(f"Final percentage: {'%.2f' % final_percentage}%")
 
 
     if savefile:
