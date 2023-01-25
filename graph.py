@@ -19,11 +19,13 @@ def create_graph(args=[], parameters={}):
     plt.fill_between(np.arange(steps),
                     *np.percentile(category_data, [25, 75], axis=0), alpha=.2)
 
-    if parameters:
-        plt.title(f"Final percentage: {'%.2f' % final_percentage}%. n: {parameters['n']}, m: {parameters['m']}, d: {parameters['d']}, c: {parameters['c']}")
-    else:
-        plt.title(f"Final percentage: {'%.2f' % final_percentage}%")
 
+    n = int(data[:,categories.index("n")][0])
+    m = data[:,categories.index("m")][0]
+    d = data[:,categories.index("d")][0]
+    c = data[:,categories.index("c")][0]
+
+    plt.title(f"Final percentage: {'%.2f' % final_percentage}%. n: {n}, m: {m}, d: {d}, c: {c}")
 
     if savefile:
         plt.savefig(savefile)
