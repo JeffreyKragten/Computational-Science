@@ -43,9 +43,7 @@ class SignModel(mesa.Model):
         chances = [d, (c / 2), (c / 2), h]
         agent_genes = random.choices(possible_genes, chances)
         agent_deafness, agent_genes = agent_genes[0]
-        agent_language = 0
-        if agent_deafness:
-            agent_language = 1
+        agent_language = int(agent_deafness)
 
         return agent_deafness, agent_genes, agent_language
 
