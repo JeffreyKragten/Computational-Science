@@ -9,6 +9,7 @@ $ python graph.py [category] [loadfile] [savefile] [*values]
     The kind of data that is represented. Categories to choose from:
         n, m, d, c, agent_count, percentage_signers, percentage_fluent_signers,
         percentage_non_fluent_signers, percentage_deaf, percentage_carry
+    Use [category1]/[category2] to get the ratio between the two categories.
 
 - loadfile:
     File in from which the data is loaded to represent.
@@ -29,8 +30,13 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
-def create_graph(args=[], parameters={}):
-    category = args[0] if len(args) > 0 else "percentage_non_fluent_signers"
+
+def create_graph(category="percentage_non_fluent_signers",
+                 category2=None,
+                 end=False,
+                 loadfile="results",
+                 savefile=None,
+                 values=[]):
     # category_signers = "percentage_signers"
 
     # Check if there is a results directory.
@@ -39,25 +45,15 @@ def create_graph(args=[], parameters={}):
         print("No results directory")
         return
 
-    # Create path for files to read data from.
-    loadfile = args[1] if len(args) > 1 else "results"
-
-    # Create the path for the savefile and get remaining arguments.
-    if len(args) > 2 and not args[2].replace(".", "", 1).isdigit():
-        savefile = f"{results_path}{args[2]}"
-        vals = args[3:]
-    else:
-        savefile = None
-        vals = args[2:]
-
     if "*" not in loadfile:
-        vals = [""]
+        values = [""]
 
-    if not vals:
+    if not values:
         print("No values given")
         return
 
-    for val in vals:
+    data = None
+    for val in values:
         # Read the data from the results file.
         path = f"{results_path}{loadfile.replace('*', val, 1)}.csv"
         try:
@@ -79,17 +75,28 @@ def create_graph(args=[], parameters={}):
             continue
         category_data = data[:,category_index].reshape((-1, steps))
 
-        # category_data_signers = data[:,categories.index(category_signers)].reshape((-1, steps))
-        # final_percentage = np.median(category_data[:,-1]) * 100
-        # final_percentage_signers = np.median(category_data_signers[:,-1]) * 100
-        # ratio = final_percentage / final_percentage_signers
-        # print(f"Final percentage {args[1]}: {'%.2f' % final_percentage}%. Ratio {args[1]}: {'%.2f' % ratio}.")
+        if category2 is None:
+            quartiles = np.percentile(category_data, [25, 50, 75], axis=0)
+            if end:
+                plt.plot(val, quartiles[1,-1], marker="o", color="k")
+                plt.vlines(val, quartiles[0,-1], quartiles[2,-1], "k")
+            else:
+                plt.plot(quartiles[1], label=val)
+                plt.fill_between(np.arange(steps), quartiles[0], quartiles[2], alpha=.2)
+        else:
+            try:
+                category2_index = categories.index(category2)
+            except:
+                print(f"Category {category2} not in file {path.split('/')[-1]}")
+                continue
+            category2_data = data[:,category2_index].reshape((-1, steps))
+            plt.plot(np.median(category_data, axis=0) / np.median(category2_data, axis=0), label=val)
 
-        quartiles = np.percentile(category_data, [25, 50, 75], axis=0)
-        plt.plot(quartiles[1], label=val)
-        plt.fill_between(np.arange(steps), quartiles[0], quartiles[2], alpha=.2)
 
     plt.legend(loc="upper left")
+
+    if data is None:
+        return
 
     n = int(data[:,categories.index("n")][0])
     m = data[:,categories.index("m")][0]
@@ -99,9 +106,37 @@ def create_graph(args=[], parameters={}):
     plt.title(f"n: {n}, m: {m}, d: {d}, c: {c}")
 
     if savefile:
-        plt.savefig(savefile)
+        plt.savefig(f"{results_path}{savefile}")
     else:
         plt.show()
 
+
+def __read_args__(args):
+    if len(args) == 0:
+        category = "percentage_non_fluent_signers"
+        category2 = None
+    elif "/" in args[0]:
+        category, category2 = args[0].split("/", 1)
+    else:
+        category = args[0]
+        category2 = None
+
+    end = False
+    if len(args) > 1 and args[1] in ["True", "False"]:
+        end = args[1] == "True"
+        args = args[1:]
+
+    loadfile = args[1] if len(args) > 1 else "results"
+
+    if len(args) > 2 and not args[2].replace(".", "", 1).isdigit():
+        savefile = args[2]
+        values = args[3:]
+    else:
+        savefile = None
+        values = args[2:]
+
+    return category, category2, end, loadfile, savefile, values
+
+
 if __name__ == "__main__":
-    create_graph(sys.argv[1:])
+    create_graph(*__read_args__(sys.argv[1:]))

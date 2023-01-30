@@ -31,7 +31,8 @@ def main():
     for j in parameters['m']:
         results_df[results_df['m'] == j].to_csv(f'results/results_{j}.csv')
 
-    create_graph(sys.argv[1:], parameters)
+    #TODO
+    create_graph()
 
 if __name__ == "__main__":
     main()
