@@ -20,6 +20,10 @@ class Person(Agent):
 
 
     def determine_language(self):
+        """
+        Determine depending on the family of this agent which family member
+        including this agent itself speaks sign language
+        """
         family = self.get_family()
         # If nobody in the family is deaf or nobody speaks sign language.
         if not (self.deafness or any(member.deafness > 0 for member in family)) \

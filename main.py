@@ -23,11 +23,12 @@ def main():
         display_progress=True,
     )
 
-    results_df = pd.DataFrame(results)
+    # Create results directory if it not exsists yet.
     if not os.path.exists("results"):
         os.makedirs("results")
-    # results_df.to_csv(f'results/results_{parameters["m"]}_{parameters["d"]}_{parameters["c"]}.csv')
 
+    # Create a file with all the collected data per.
+    results_df = pd.DataFrame(results)
     for j in parameters['m']:
         results_df[results_df['m'] == j].to_csv(f'results/results_{j}.csv')
 
