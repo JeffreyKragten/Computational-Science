@@ -103,7 +103,7 @@ def create_graph(category="percentage_non_fluent_signers",
     d = data[:,categories.index("d")][0]
     c = data[:,categories.index("c")][0]
 
-    plt.title(f"n: {n}, m: {m}, d: {d}, c: {c}")
+    plt.title(f"n: {n}, d: {d}, c: {c}")
 
     if savefile:
         plt.savefig(f"{results_path}{savefile}")

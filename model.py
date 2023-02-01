@@ -3,6 +3,13 @@ import random
 from agent import Person
 
 
+"""
+Agent-based model simulator using the Mesa framework.
+Initialised by specifying the size of a generation (n),
+assortative marriage parameter (m), proportion of Deaf agents in first generation (d),
+proportion of 'carrying' agents in first generation (c).
+"""
+
 class SignModel(mesa.Model):
     def __init__(self, n, m, d, c):
         self.agents_per_gen = int(n)
@@ -28,6 +35,10 @@ class SignModel(mesa.Model):
 
 
     def step(self):
+        """
+        Execute agent step, remove agents age > 2, marry agents age 1,
+        create new generation of agents, collect data on population.
+        """
         self.kill_agents = []
         self.schedule.step()
         for i in self.kill_agents:
@@ -38,6 +49,9 @@ class SignModel(mesa.Model):
 
 
     def init_genes(self, d, c):
+        """
+        Initialize genes for first generation of agents using specified parameters.
+        """
         possible_genes = [(True, "dd"), (False, "Dd"), (False, "dD"), (False, "DD")]
         h = 1 - d - c
         chances = [d, (c / 2), (c / 2), h]
@@ -49,6 +63,9 @@ class SignModel(mesa.Model):
 
 
     def inherit_genes(self, parents):
+        """
+        Randomly determine agents for child agent.
+        """
         gene_1 = random.choice(parents[0].genes)
         gene_2 = random.choice(parents[1].genes)
         child_genes = gene_1 + gene_2
@@ -60,6 +77,10 @@ class SignModel(mesa.Model):
 
 
     def marry(self):
+        """
+        Marry all agents age 1. Marry ndm Deaf couples, nhm hearing couples,
+        then marry indiscriminately.
+        """
         self.married = []
         ndm, nhm = self.assortative_couples()
 
@@ -72,6 +93,9 @@ class SignModel(mesa.Model):
 
 
     def to_marry(self, list, amount):
+        """
+        Iterate through agent list to find suitable couples.
+        """
         for i in range(amount):
             found = False
             tries = 0
@@ -85,16 +109,28 @@ class SignModel(mesa.Model):
 
 
     def assortative_couples(self):
+        """
+        Determine the number of assortative marriages:
+        nd = number of deaf agents age 1
+        nk = number of hearing agents age 1
+        Multiply numbers by assortative marriage value, divide by 2 for number of couples.
+        """
         nd = len(self.to_be_married_deaf)
         nk = self.agents_per_gen - nd
         return int((nd*self.assortative_marriage)/2), int((nk*self.assortative_marriage)/2)
 
 
     def able_to_marry(self, agent, partner):
+        """
+        Agents are able to marry if they are of opposite sex and not siblings.
+        """
         return not (agent.sex == partner.sex or agent in partner.get_siblings())
 
 
     def wedding(self, agent, partner):
+        """
+        Agents learn sign language of their partner is a signer.
+        """
         agent.partner = partner
         partner.partner = agent
         self.share_language(agent, partner)
@@ -103,11 +139,14 @@ class SignModel(mesa.Model):
 
 
     def share_language(self, agent, partner):
+        """
+        both agents a couple learn non-fluent signing if there
+        is at least one Deaf person and one singing person in the couple.
+        """
         if agent.sign_lang == partner.sign_lang:
             return
 
         couple = (agent, partner)
-
         if any(person.deafness for person in couple):
             if any(person.sign_lang > 0 for person in couple):
                 if agent.sign_lang == 0:
@@ -117,6 +156,11 @@ class SignModel(mesa.Model):
 
 
     def new_gen(self):
+        """
+        Create new generation of agents by randomly choosing recently married couples.
+        New agents inherit genes and possibly deafness from parents and are added to
+        the scheduler.
+        """
         for k in range(self.total_agents, self.agents_per_gen + self.total_agents):
             agent = random.choice(self.married)
             partner = agent.partner
@@ -126,7 +170,11 @@ class SignModel(mesa.Model):
         self.total_agents += self.agents_per_gen
 
 
+
     def amount_deaf(self):
+        """
+        Data collecting functions.
+        """
         return len([agent for agent in self.schedule.agents if agent.deafness and agent.age == 1])
 
 
