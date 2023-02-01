@@ -5,8 +5,8 @@ from agent import Person
 
 class SignModel(mesa.Model):
     def __init__(self, n, m, d, c):
-        self.agents_per_gen = n
-        self.total_agents = n
+        self.agents_per_gen = int(n)
+        self.total_agents = int(n)
         self.assortative_marriage = m
         self.schedule = mesa.time.RandomActivation(self)
         self.to_be_married_deaf = []

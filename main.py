@@ -3,13 +3,29 @@ from multiprocessing import freeze_support
 import pandas as pd
 from model import SignModel
 import os
-from graph import create_graph
 import sys
+import itertools
 
 def main():
     freeze_support()
     # parameters to run the model with
-    parameters = {"n": 728, "m": [0, 0.025, 0.5, 0.075, 0.1, 0.125], "d": 0.022, "c": 0.172}
+    parameters = {"n": 728, "m": 0.58, "d": 0.022, "c": 0.172}
+    p = None
+    for i, arg in enumerate(sys.argv[1:]):
+        if arg.isdigit():
+            arg += "."
+        if arg.replace(".", "", 1).isdigit() and p:
+            if type(parameters[p]) is list:
+                parameters[p].append(float(arg))
+            else:
+                parameters[p] = [float(arg)]
+        elif arg in parameters and len(sys.argv) > i + 2 and \
+             sys.argv[i + 2].replace(".", "", 1).isdigit():
+            p = arg
+        else:
+            print("Unknown parameter: {arg}")
+            return
+
     generations = 50
 
     # batch runs the model
@@ -29,11 +45,16 @@ def main():
 
     # Create a file with all the collected data per.
     results_df = pd.DataFrame(results)
-    for j in parameters['m']:
-        results_df[results_df['m'] == j].to_csv(f'results/results_{j}.csv')
 
-    #TODO
-    create_graph()
+    pars = [p for p, v in parameters.items() if type(v) is list]
+    for values in itertools.product(*(parameters[p] for p in pars)):
+        res = results_df
+        savefile = "results/results"
+        for p, v in zip(pars, values):
+            res = res[res[p] == v]
+            savefile += f"_{p}_{v}"
+        res.to_csv(f"{savefile}.csv")
+
 
 if __name__ == "__main__":
     main()
