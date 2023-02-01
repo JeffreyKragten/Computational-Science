@@ -7,7 +7,7 @@ from agent import Person
 Agent-based model simulator using the Mesa framework.
 Initialised by specifying the size of a generation (n),
 assortative marriage parameter (m), proportion of Deaf agents in first generation (d),
-proportion of 'carrying' agents in first generation.
+proportion of 'carrying' agents in first generation (c).
 """
 
 class SignModel(mesa.Model):

@@ -4,7 +4,6 @@ import pandas as pd
 from model import SignModel
 import os
 from graph import create_graph
-import sys
 
 def main():
     freeze_support()
