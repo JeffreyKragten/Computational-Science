@@ -22,8 +22,7 @@ The research question answered here is “What value should the assortative marr
 Our hypothesis is as follows: A lower assortative marriage value results in a higher percentage of non-fluent signers
 
 ## Results
-[our results]
-[don't forget a graph or two]
+![example image](example_image.png)
 
 ## Running the code
 ### Necessary packages to run the code:
@@ -36,23 +35,26 @@ To run the model,you can simply run main.py.
 ```
 $ python main.py
 ```
-If you want to changes the parameter give the name of the parameters and the values to set the parameters to. The parameters and there standard values are:
+If you want to change the parameters, give the name of the parameters and the values to set the parameters to. The parameters and their standard values are:
 - n: 728    The number of agents per generation.
-- m: 0.58   The percantage of agent prefering assortative marriage.
-- d: 0.22   The percentage of deaf in the first generation.
+- m: 0.58   The percentage of agent preferring assortative marriage.
+- d: 0.22   The percentage of deaf agents in the first generation.
 - c: 0.172  Percentage of agents not deaf but carrying a deaf gene in the first generation.
 
 Example:
 ```
-$ python main.py n 500 m 0.1 0.2 0.3
+$ python main.py m 0.05 0.1 0.2 0.4 0.58
 ```
-This command runs the model three times once for each value of m (0.1 0.2 and 0.3) with 500 agents per generation and the standard values for the other two parameters. The results will be saved to:
+This command runs the model once for each value of m with 728 agents per generation and the other standard values for the other two parameters. The results will be saved to:
 
-/results/results_n_500_m_0.1.csv </br>
-/results/results_n_500_m_0.2.csv </br>
-/results/results_n_500_m_0.3.csv
+/results/results_m_0.05.csv </br>
+/results/results_m_0.1.csv </br>
+/results/results_m_0.2.csv </br>
+/results/results_m_0.4.csv </br>
+/results/results_m_0.58.csv
 
-To create a graph the data use graph.py.
+
+Use graph.py to create graphs from the data in the results folder.
 ```
 $ python graph.py [category] [loadfile] [*values]
 $ python graph.py [category] [loadfile] [savefile] [*values]
@@ -64,14 +66,16 @@ $ python graph.py [category] [loadfile] [savefile] [*values]
 
 Example:
 ```
-$ python graph.py percentage_signers results_n_500_m_* plot 0.1 0.2 0.3
+$ python graph.py percentage_non_fluent_signers results_m_* plot 0.05 0.1 0.2 0.4 0.58
 ```
-This command will make a plot of the percentage of people that can speak sign language from the data in the following files:
+This command will make a plot of the percentage of people that can speak sign language non-fluently from the data in the following files:
 
-/results/results_n_500_m_0.1.csv </br>
-/results/results_n_500_m_0.2.csv </br>
-/results/results_n_500_m_0.3.csv
+/results/results_m_0.05.csv </br>
+/results/results_m_0.1.csv </br>
+/results/results_m_0.2.csv </br>
+/results/results_m_0.4.csv </br>
+/results/results_m_0.58.csv
 
 and saves the graph in the file:
 
-/results/plot.png
+/graphs/plot.png
