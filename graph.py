@@ -97,9 +97,12 @@ def create_graph(category="percentage_non_fluent_signers",
     d = data[:,categories.index("d")][0]
     c = data[:,categories.index("c")][0]
 
-    plt.title(f"n: {n}, d: {d}, c: {c}")
+    plt.title(f"n: {n}, m: {m}, c: {c}")
     plt.xlabel("step")
-    plt.ylabel(category.replace("_", " "))
+    if category2:
+        plt.ylabel(f'{category.replace("_", " ")} / {category2.replace("_", " ")}')
+    else:
+        plt.ylabel(category.replace("_", " "))
     plt.legend(bbox_to_anchor=(1.05, .5), loc="center left")
     plt.subplots_adjust(right=.78)
 
