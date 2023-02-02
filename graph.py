@@ -1,7 +1,4 @@
 """
-$ python graph.py
-$ python graph.py [category]
-$ python graph.py [category] [loadfile]
 $ python graph.py [category] [loadfile] [*values]
 $ python graph.py [category] [loadfile] [savefile] [*values]
 
@@ -92,9 +89,6 @@ def create_graph(category="percentage_non_fluent_signers",
             category2_data = data[:,category2_index].reshape((-1, steps))
             plt.plot(np.median(category_data, axis=0) / np.median(category2_data, axis=0), label=val)
 
-
-    plt.legend(loc="upper left")
-
     if data is None:
         return
 
@@ -104,6 +98,10 @@ def create_graph(category="percentage_non_fluent_signers",
     c = data[:,categories.index("c")][0]
 
     plt.title(f"n: {n}, d: {d}, c: {c}")
+    plt.xlabel("step")
+    plt.ylabel(category.replace("_", " "))
+    plt.legend(bbox_to_anchor=(1.05, .5), loc="center left")
+    plt.subplots_adjust(right=.78)
 
     graphs_path = f"{sys.path[0]}/graphs/"
     if not os.path.exists(graphs_path):
