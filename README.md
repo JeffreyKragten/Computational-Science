@@ -34,7 +34,7 @@ Our hypothesis is as follows: A lower assortative marriage value results in a hi
 ### Executing main.py
 To run the model,you can simply run main.py.
 ```
-python main.py
+$ python main.py
 ```
 If you want to changes the parameter give the name of the parameters and the values to set the parameters to. The parameters and there standard values are:
 - n: 728    The number of agents per generation.
@@ -44,7 +44,7 @@ If you want to changes the parameter give the name of the parameters and the val
 
 Example:
 ```
-python main.py n 500 m 0.1 0.2 0.3
+$ python main.py n 500 m 0.1 0.2 0.3
 ```
 This command runs the model three times once for each value of m (0.1 0.2 and 0.3) with 500 agents per generation and the standard values for the other two parameters. The results will be saved to:
 
@@ -64,7 +64,7 @@ $ python graph.py [category] [loadfile] [savefile] [*values]
 
 Example:
 ```
-python graph.py percentage_signers results_n_500_m_* plot 0.1 0.2 0.3
+$ python graph.py percentage_signers results_n_500_m_* plot 0.1 0.2 0.3
 ```
 This command will make a plot of the percentage of people that can speak sign language from the data in the following files:
 
