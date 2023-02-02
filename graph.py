@@ -105,8 +105,11 @@ def create_graph(category="percentage_non_fluent_signers",
 
     plt.title(f"n: {n}, d: {d}, c: {c}")
 
+    graphs_path = f"{sys.path[0]}/graphs/"
+    if not os.path.exists(graphs_path):
+        os.makedirs(graphs_path)
     if savefile:
-        plt.savefig(f"{results_path}{savefile}")
+        plt.savefig(f"{graphs_path}{savefile}")
     else:
         plt.show()
 
